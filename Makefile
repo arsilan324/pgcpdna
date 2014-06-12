@@ -4,7 +4,7 @@ ref=NC_021456
 # Picea abies chloroplast complete genome
 edirect_query='Picea abies[Organism] chloroplast[Title] complete genome[Title] RefSeq[Keyword]'
 
-all: $(name).gbk.png
+all: $(name).gff.gene $(name).gbk.png
 
 clean:
 	rm -f $(name).gb $(name).gbk $(name).gff $(name).gbk.png
@@ -37,9 +37,13 @@ plastids/%:
 	maker -fix_nucleotides
 	touch $@
 
-%.gff: %.maker.output/stamp
+%.orig.gff: %.maker.output/stamp
 	gff3_merge -s -g -n -d $*.maker.output/$*_master_datastore_index.log \
 		|sed '/rrn/s/mRNA/rRNA/;/trn/s/mRNA/tRNA/' >$@
+
+%.gff: %.orig.gff prokaryotic.gff
+	(cat $< && egrep -w 'matK|trnG-GCC|rpl22|psaA|psbD' prokaryotic.gff) \
+		|egrep '\t(gene|tRNA|rRNA)\t' >$@
 
 %.gb: %.gff %.fa
 	bin/gff_to_genbank.py $^ >$@

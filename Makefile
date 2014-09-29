@@ -62,6 +62,31 @@ plastids/%:
 %.gff.png: %.gff
 	gt sketch $@ $<
 
+%.all.maker.proteins.fasta %.all.maker.transcripts.fasta: %.maker.output/stamp
+	fasta_merge -d $*.maker.output/$*_master_datastore_index.log
+
+$(ref).%.p2g: %.fa $(ref).fa
+	exonerate $< $(ref).fa \
+		-m p2g -i -11 \
+		--proteinwordlen 3 --proteinhspthreshold 13 \
+		--geneticcode 11 \
+		--splice5 splice0 --splice3 splice0 \
+		--bestn 1 >$@
+
+$(ref).%.p2g.gff2: %.fa $(ref).fa
+	exonerate $< $(ref).fa \
+		-m p2g -i -11 \
+		--proteinwordlen 3 --proteinhspthreshold 13 \
+		--geneticcode 11 \
+		--splice5 splice0 --splice3 splice0 \
+		--bestn 1 \
+		--showtargetgff true --showalignment false --showvulgar false \
+		>$@
+		#|sed -n '/^##gff-version/,/END OF GFF DUMP/p' >$@
+
+%.p2g.gff: %.p2g.gff2
+	bin/process_exonerate_gff3 -t Protein $< >$@
+
 # Report the annotated genes
 
 %.gff.gene: %.gff

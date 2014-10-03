@@ -20,7 +20,7 @@ cds_aa.orig.fa cds_na.orig.fa: %.fa:
 		|efetch -format fasta_$* >$@
 
 cds_aa.fa cds_na.fa: %.fa: %.orig.fa
-	sed -E 's/^>(.*gene=([^]]*).*)$$/>\2|\1/' $< >$@
+	sed -E 's/^>(.*gene=([^]]*).*)$$/>\2|\1/' $< |seqtk seq >$@
 
 # asn,faa,ffn,fna,frn,gbk,gff,ptt,rnt,rpt,val
 plastids/%:
@@ -70,3 +70,14 @@ plastids/%:
 		s/^.*Name=([^|;]*).*$$/\1/; \
 		s/-gene//; \
 		p' >$@
+
+# Six-frame translation
+
+%-orf.fa: %.fa
+	sixpack -table 11 -sequence $< -outfile $*-orf.sixpack -outseq /dev/stdout |seqtk seq >$@
+
+%.fa.fm: %.fa
+	abyss-index -a '-ACDEFGHIKLMNPQRSTVWXY' $<
+
+$(ref).%.abyss-map.sam: %.fa $(ref).fa.fm
+	abyss-map --no-rc -k6 $< $(ref).fa >$@

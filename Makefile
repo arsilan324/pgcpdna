@@ -76,8 +76,5 @@ plastids/%:
 %-orf.fa: %.fa
 	sixpack -table 11 -sequence $< -outfile $*-orf.sixpack -outseq /dev/stdout |seqtk seq >$@
 
-%.fa.fm: %.fa
-	abyss-index -a '-ACDEFGHIKLMNPQRSTVWXY' $<
-
-$(ref).%.abyss-map.sam: %.fa $(ref).fa.fm
-	abyss-map --no-rc -k6 $< $(ref).fa >$@
+$(ref).%.abyss-map.sam: %.fa $(ref).fa
+	abyss-map --protein -k6 $< $(ref).fa >$@

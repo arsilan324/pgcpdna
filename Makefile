@@ -74,7 +74,8 @@ plastids/%:
 # Generate a tbl file for tbl2asn and GenBank submission
 
 %.fsa: %.fa
-	sed s'/^>/>scaffold/' $< >$@
+	(echo '>scaffold1 [organism=Picea glauca] [location=chloroplast] [completeness=complete] [topology=circular] [gcode=11]'; \
+		tail -n +2 $<) >$@
 
 %.sqn: %.fsa %.sbt %.tbl
 	mkdir -p tbl2asn

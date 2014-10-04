@@ -9,7 +9,11 @@ all: $(name).gff.gene $(name).gbk.png $(name)-manual.sqn
 clean:
 	rm -f $(name).orig.gff $(name).gff $(name).orig.gbk $(name).gbk $(name).gbk.png
 
-.PHONY: all clean
+install-deps:
+	brew install edirect genometools maker ogdraw tbl2asn
+	pip install --upgrade biopython bcbio-gff
+
+.PHONY: all clean install-deps
 .DELETE_ON_ERROR:
 .SECONDARY:
 

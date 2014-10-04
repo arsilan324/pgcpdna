@@ -4,7 +4,7 @@ ref=NC_021456
 # Picea abies chloroplast complete genome
 edirect_query='Picea abies[Organism] chloroplast[Title] complete genome[Title] RefSeq[Keyword]'
 
-all: $(name).gff.gene $(name).gbk.png $(name)-manual.sqn
+all: $(name).gff.gene $(name).gbk.png $(name)-manual.gbk.png
 
 clean:
 	rm -f $(name).orig.gff $(name).gff $(name).orig.gbk $(name).gbk $(name).gbk.png
@@ -81,6 +81,17 @@ plastids/%:
 	(echo '>scaffold1 [organism=Picea glauca] [location=chloroplast] [completeness=complete] [topology=circular] [gcode=11]'; \
 		tail -n +2 $<) >$@
 
-%.sqn: %.fsa %.sbt %.tbl
+%.gbf %.sqn: %.fsa %.sbt %.tbl
 	mkdir -p tbl2asn
 	tbl2asn -i $< -t $*.sbt -Vbv
+
+# Symlinks
+
+pg29-plastid-manual.fa: pg29-plastid.fa
+	ln -s $< $@
+
+pg29-plastid-manual.ircoord: pg29-plastid.ircoord
+	ln -s $< $@
+
+pg29-plastid-manual.gbk: pg29-plastid-manual.gbf
+	ln -s $< $@

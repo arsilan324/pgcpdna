@@ -37,7 +37,7 @@ plastids/%:
 %.frn: plastids/%.frn
 	sed 's/^>.*\[gene=/>/;s/\].*$$//' $< >$@
 
-%.maker.output/stamp: maker_opts.ctl %.fa $(ref).frn cds_aa.fa
+pg29-plastid.maker.output/stamp: %.maker.output/stamp: maker_opts.ctl %.fa $(ref).frn cds_aa.fa
 	maker -fix_nucleotides
 	touch $@
 

@@ -9,17 +9,17 @@ def print_coord(f):
     """ Print the coordinates of this feature.
     """
     if f.strand == 1:
-        print "%d\t%d" % (f.location.nofuzzy_start + 1, f.location.nofuzzy_end)
+        print "%d\t%d" % (f.location.start + 1, f.location.end)
     else:
-        print "%d\t%d" % (f.location.nofuzzy_end, f.location.nofuzzy_start + 1)
+        print "%d\t%d" % (f.location.end, f.location.start + 1)
 
 def print_coord_override_type(f, type):
     """ Print the coordinates of this feature and a type.
     """
     if f.strand == 1:
-        print "%d\t%d\t%s" % (f.location.nofuzzy_start + 1, f.location.nofuzzy_end, type)
+        print "%d\t%d\t%s" % (f.location.start + 1, f.location.end, type)
     else:
-        print "%d\t%d\t%s" % (f.location.nofuzzy_end, f.location.nofuzzy_start + 1, type)
+        print "%d\t%d\t%s" % (f.location.end, f.location.start + 1, type)
 
 def print_coord_type(f):
     """ Print the coordinates and type of this feature.

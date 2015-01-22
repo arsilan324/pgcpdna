@@ -77,12 +77,14 @@ pg29-plastid.maker.output/stamp: %.maker.output/stamp: maker_opts.ctl %.fa $(ref
 
 # Generate a tbl file for tbl2asn and GenBank submission
 
+%.tbl: %.gff %.fa
+	bin/gff3-to-tbl $^ >$@
+
 %.fsa: %.fa
-	(echo '>scaffold1 [organism=Picea glauca] [location=chloroplast] [completeness=complete] [topology=circular] [gcode=11]'; \
+	(echo '>1 [organism=Picea glauca] [location=chloroplast] [completeness=complete] [topology=circular] [gcode=11]'; \
 		tail -n +2 $<) >$@
 
 %.gbf %.sqn: %.fsa %.sbt %.tbl
-	mkdir -p tbl2asn
 	tbl2asn -i $< -t $*.sbt -Vbv
 
 # Symlinks
@@ -91,7 +93,4 @@ pg29-plastid-manual.fa: pg29-plastid.fa
 	ln -s $< $@
 
 pg29-plastid-manual.ircoord: pg29-plastid.ircoord
-	ln -s $< $@
-
-pg29-plastid-manual.gbk: pg29-plastid-manual.gbf
 	ln -s $< $@

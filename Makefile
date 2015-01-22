@@ -77,7 +77,12 @@ pg29-plastid.maker.output/stamp: %.maker.output/stamp: maker_opts.ctl %.fa $(ref
 
 # Generate a tbl file for tbl2asn and GenBank submission
 
-%.tbl: %.gff %.fa
+%-gene-product.tsv: %.gff
+	(printf "gene\tproduct\n" \
+		&& sed -En 's/%2C/,/g;s~%2F~/~g; \
+			s/^.*gene=([^;]*);.*product=([^;]*);.*$$/\1	\2/p' $< |sort -u) >$@
+
+%.tbl: %.gff
 	bin/gff3-to-tbl $^ >$@
 
 %.fsa: %.fa

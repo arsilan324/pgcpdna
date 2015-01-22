@@ -1,10 +1,8 @@
 #!/usr/bin/env python
-# Usage: gff3-to-tbl project.gff project.fa >project.tbl
+# Usage: gff3-to-tbl project.gff >project.tbl
 # Written by Shaun Jackman <sjackman@gmail.com>.
 
 from BCBio import GFF
-from Bio import Alphabet
-from Bio import SeqIO
 import sys
 
 def print_coord(f):
@@ -98,15 +96,9 @@ def print_gene(f):
             print "\t\t\tproduct\ttRNA-%s" % aa
             print "\t\t\tnote\tanticodon:%s" % anticodon
 
-def main(gff_file, fasta_file):
-    fasta_fh = open("seq.fsa", "w")
-    fasta_input = SeqIO.to_dict(SeqIO.parse(fasta_file, "fasta", Alphabet.generic_dna))
-    for rec in GFF.parse(gff_file, fasta_input):
-        circular = rec.annotations.get('molecule', 'linear')
-        rec.description = "[organism=%s] [strain=%s] [topology=%s] [molecule=DNA] [tech=wgs] [gcode=11]" % (sys.argv[1], sys.argv[2], circular)
-        SeqIO.write([rec], fasta_fh, "fasta")
-
-        print ">Feature %s" % rec.name
+def main(gff_file):
+    for rec in GFF.parse(gff_file):
+        print ">Feature %s" % rec.id
         seen = {}
         for f in rec.features:
             if f.type != 'gene':

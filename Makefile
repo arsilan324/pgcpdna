@@ -90,7 +90,7 @@ pg29-plastid.maker.output/stamp: %.maker.output/stamp: maker_opts.ctl %.fa $(ref
 		tail -n +2 $<) >$@
 
 %.gbf %.sqn: %.fsa %.sbt %.tbl
-	tbl2asn -i $< -t $*.sbt -Vbv
+	tbl2asn -i $< -t $*.sbt -Z $*.discrep -M n -Vbv
 
 # Symlinks
 

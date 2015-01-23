@@ -12,3 +12,21 @@
 NC_021456.*
 plastids
 ????-??-??T??:??
+
+# BWA
+*.bam
+*.bai
+*.sam
+*.fa.amb
+*.fa.ann
+*.fa.bwt
+*.fa.pac
+*.fa.sa
+
+# tbl2asn
+*.discrep
+*.fixedproducts
+*.fsa
+*.gbf
+*.sqn
+*.val
